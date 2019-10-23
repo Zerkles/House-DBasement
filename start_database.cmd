@@ -1,0 +1,2 @@
+docker build -t housedb-postgres:latest database/.
+docker run -it -p 5432:5432 housedb-postgres:latest
