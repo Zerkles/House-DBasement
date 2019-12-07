@@ -1,0 +1,1 @@
+INSERT INTO twój_stary VALUES ( CHUJ, TWOJA_STARA, GÓWNO )
