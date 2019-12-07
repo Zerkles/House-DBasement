@@ -1,38 +1,33 @@
-create table HOUSE(
+create table HOUSES(
 HouseID int,
-FloorID int,
-FloorsCount int,
-DoorID int,
-RoofID int,
-WallID int,
-ChimneyID int
+LevelsCount int
 );
   
-create table FLOOR(
-FloorID int,
+create table LEVELS(
+LevelID int,
 FloorLevel int, --numer piętra
 HouseID int --id domku, do którego należy piętro
 );
 
-create table DOOR(
+create table DOORS(
 DoorID int,
-FloorID int, 
+LevelID int, 
 Position_x int
 );
 
-create table ROOF(
+create table ROOFS(
 RoofID int,
 HouseID int,
-Chimney_Count int
+ChimneysCount int
 );
 
 create table WINDOWS(
 WindowID int,
-FloorID int, 
+LevelID int, 
 Position_x int);
 
-create table BLANK(
+create table BLANKS(
 BlankID int, 
-FloorID int,
+LevelID int,
 Position_x int
 );
