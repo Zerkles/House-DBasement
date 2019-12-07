@@ -10,39 +10,29 @@ ChimneyID int
   
 create table FLOOR(
 FloorID int,
-FloorStyle int,
-WindowID int,
-WindowsCount int,
-Width int,
-Height int
+FloorLevel int, --numer piętra
+HouseID int --id domku, do którego należy piętro
 );
 
 create table DOOR(
 DoorID int,
-DoorStyle int,
-Width int,
-Height int);
+FloorID int, 
+Position_x int
+);
 
 create table ROOF(
 RoofID int,
-RoofStyle int,
-Width int,
-Height int);
-  
-create table WALL(
-WallID int,
-WallStyle int,
-Width int,
-Height int);
-
-create table CHIMNEY(
-WallID int,
-ChimneyStyle int,
-Width int,
-Height int);
+HouseID int,
+Chimney_Count int
+);
 
 create table WINDOWS(
 WindowID int,
-WindowStyle int,
-Width int,
-Height int);
+FloorID int, 
+Position_x int);
+
+create table BLANK(
+BlankID int, 
+FloorID int,
+Position_x int
+);
