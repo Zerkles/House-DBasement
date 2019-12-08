@@ -5,7 +5,7 @@ LevelsCount int
   
 create table LEVELS(
 LevelID serial,
-FloorLevel int, --numer piętra
+LevelFloor int, --numer piętra
 HouseID int --id domku, do którego należy piętro
 );
 
