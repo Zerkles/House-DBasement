@@ -1,33 +1,33 @@
 create table HOUSES(
-HouseID int NOT NULL AUTO_INCREMENT,
+HouseID serial,
 LevelsCount int
 );
   
 create table LEVELS(
-LevelID int NOT NULL AUTO_INCREMENT ,
+LevelID serial,
 FloorLevel int, --numer piętra
 HouseID int --id domku, do którego należy piętro
 );
 
 create table DOORS(
-DoorID int NOT NULL AUTO_INCREMENT,
+DoorID serial,
 LevelID int, 
 Position_x int
 );
 
 create table ROOFS(
-RoofID int NOT NULL AUTO_INCREMENT,
+RoofID serial,
 HouseID int,
 ChimneysCount int
 );
 
 create table WINDOWS(
-WindowID int NOT NULL AUTO_INCREMENT,
+WindowID serial,
 LevelID int, 
 Position_x int);
 
 create table BLANKS(
-BlankID int NOT NULL AUTO_INCREMENT, 
+BlankID serial, 
 LevelID int,
 Position_x int
 );
