@@ -1,6 +1,7 @@
 create table HOUSES(
 HouseID serial,
-LevelsCount int
+LevelsCount int,
+ImageURL VARCHAR(128)
 );
   
 create table LEVELS(

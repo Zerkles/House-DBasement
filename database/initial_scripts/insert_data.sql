@@ -1,5 +1,9 @@
-INSERT INTO HOUSES (HouseID) VALUES
-(DEFAULT);
+INSERT INTO HOUSES (LevelsCount, ImageURL) VALUES
+(3, 'HTTP'),
+(3, 'HTTP'),
+(3, 'HTTP'),
+(3, 'HTTP'),
+(3, 'HTTP');
 
 INSERT INTO LEVELS (LevelFloor, HouseID)VALUES
 (0, 1),
