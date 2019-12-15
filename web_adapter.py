@@ -10,18 +10,17 @@ app = Flask(__name__)
 @app.route('/housedb/<house_id>', methods=['GET'])
 def get(house_id):
     houses = db_engine.execute(f"SELECT * FROM Houses where HouseID={house_id}")
-    Levels = db_engine.execute(f"SELECT * FROM Levels where HouseID={house_id}")
+    levels = db_engine.execute(f"SELECT * FROM Levels where HouseID={house_id}")
     roofs = db_engine.execute(f"SELECT * FROM Roofs where HouseID={house_id}")
 
     result_json = {"houses": [dict(zip(houses.keys(), houses.fetchone()))]}
-    print(result_json)
     result_json.update({"roofs": [dict(zip(roofs.keys(), roofs.fetchone()))]})
 
-    for Level in Levels:
+    for Level in levels:
         if "Levels" not in result_json.keys():
             result_json.update({"Levels": []})
 
-        result_json["Levels"] += [dict(zip(Levels.keys(), Level))]
+        result_json["Levels"] += [dict(zip(levels.keys(), Level))]
 
         doors = db_engine.execute(f"SELECT * FROM Doors where LevelID={Level[0]}")
         for door in doors:
@@ -44,24 +43,24 @@ def get(house_id):
 
             result_json["blanks"] += [dict(zip(blanks.keys(), blank))]
 
-    print(result_json)
     return result_json
 
 
 @app.route('/housedb', methods=['POST'])
 def post():
     data_json = request.get_json(True)
-    print(data_json)
 
     levels_map = dict()
 
     db_engine.execute(
-        f"INSERT INTO Houses(LevelsCount, ImageURL) Values{data_json['house']['levelscount'], data_json['house']['imageurl']}")
+        f"INSERT INTO Houses(LevelsCount, ImageURL) "
+        f"Values{data_json['house']['levelscount'], data_json['house']['imageurl']}")
 
     houseid = db_engine.execute("SELECT MAX(HouseID) FROM Houses").fetchone()[0]
 
     db_engine.execute(
-        f"INSERT INTO Roofs ({'chimneyscount, houseid'}) Values{data_json['house']['chimneyscount'], houseid}")
+        f"INSERT INTO Roofs ({'chimneyscount, houseid'}) "
+        f"Values{data_json['house']['chimneyscount'], houseid}")
 
     for obj in data_json['content']:
         if obj['pos_Y'] not in levels_map.keys():
@@ -81,28 +80,6 @@ def post():
         else:
             raise Exception
 
-    # db_engine.execute(f"INSERT INTO Roofs Values({data_json['roofs'][0]})")
-    #
-    # for level in data_json["Levels"]:
-    #     keys = str(list(level.keys()))[1:-1].replace("'", "")
-    #     values = str(list(level.values()))[1:-1]
-    #
-    #     db_engine.execute(f"INSERT INTO Levels ({keys + ', houseid'}) Values({values + houseid})")
-    #     levelid = db_engine.execute("SELECT MAX(LevelID) FROM Levels").fetchone()[0]
-    #
-    #     for table in level["content"].keys():
-    #         for obj in level["content"][table]:
-    #             keys = str(list(obj.keys()))[1:-1].replace("'", "")
-    #             values = str(list(obj.values()))[1:-1]
-    #
-    #             db_engine.execute(f"INSERT INTO {table} ({keys + 'Levelid'}) Values({values + levelid})")
-
-    # for Level in data_json['Levels']:
-    #     keys = str(list(Level.keys()))[1:-1].replace("'", "")
-    #     values = str(list(Level.values()))[1:-1].replace("'", "")
-    #
-    #     db_engine.execute(f"INSERT INTO Levels ({keys}) Values({values})")
-
     return get(db_engine.execute("SELECT MAX(HouseID) FROM Houses").fetchone()[0])
 
 
@@ -110,17 +87,25 @@ def post():
 def put():
     data_json = request.get_json(True)
 
-    for table in data_json.keys():
-        for obj in data_json[table]:
+    for table_name in data_json.keys():
+        for obj in data_json[table_name]:
+            nameid = table_name[:-1] + 'id'
+            nameid = nameid.lower()
 
-                keys = str(list(obj.keys())[1:])[1:-1].replace("'", "")
-                print(keys)
-                values = str(list(obj.values())[1:])[1:-1]
-                print(values)
+            keys = list(obj.keys())
+            keys.remove(nameid)
 
-                db_engine.execute(f"UPDATE {table}  SET{keys,values} WHERE {table}ID={obj[table+'ID']}")
+            sets = ""
+            for k in keys:
+                if type(obj[k]) == str:
+                    sets += (k + " = '" + obj[k] + "', ")
+                else:
+                    sets += (k + ' = ' + str(obj[k]) + ',')
 
-    return get(db_engine.execute("SELECT MAX(HouseID) FROM Houses").fetchone()[0])
+            db_engine.execute(f"UPDATE {table_name} SET {sets[:-1]} WHERE {nameid}={obj[nameid]}")
+
+
+    return get(data_json['houses'][0]['houseid'])
 
 
 @app.route('/housedb/<house_id>', methods=['DELETE'])
@@ -128,12 +113,12 @@ def delete(house_id):
     db_engine.execute(f'DELETE FROM Houses WHERE HouseID = {house_id}')
     db_engine.execute(f"DELETE FROM Roofs where HouseID={house_id}")
 
-    Levels = db_engine.execute(f"SELECT * FROM Levels where HouseID={house_id}")
+    levels = db_engine.execute(f"SELECT * FROM Levels where HouseID={house_id}")
 
-    for Level in Levels:
-        db_engine.execute(f"DELETE FROM Doors where LevelID={Level[0]}")
-        db_engine.execute(f"DELETE FROM Windows where LevelID={Level[0]}")
-        db_engine.execute(f"DELETE FROM Blanks where LevelID={Level[0]}")
+    for level in levels:
+        db_engine.execute(f"DELETE FROM Doors where LevelID={level[0]}")
+        db_engine.execute(f"DELETE FROM Windows where LevelID={level[0]}")
+        db_engine.execute(f"DELETE FROM Blanks where LevelID={level[0]}")
 
     db_engine.execute(f"DELETE FROM Levels where HouseID={house_id}")
 
