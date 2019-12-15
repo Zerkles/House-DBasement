@@ -12,7 +12,7 @@ HouseID int --id domku, do którego należy piętro
 
 create table DOORS(
 DoorID serial,
-LevelID int, 
+LevelID int,
 Position_x int
 );
 
@@ -24,7 +24,7 @@ ChimneysCount int
 
 create table WINDOWS(
 WindowID serial,
-LevelID int, 
+LevelID int,
 Position_x int);
 
 create table BLANKS(
