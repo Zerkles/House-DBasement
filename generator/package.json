@@ -1,0 +1,65 @@
+{
+  "version": 1.0,
+  "houses": [
+    {
+      "houseid": 1,
+      "levelscount": 3,
+      "imageurl": "HTTP"
+    }
+  ],
+  "roofs": [
+    {
+      "roofid": 1,
+      "houseid": 1,
+      "chimneyscount": 0
+    }
+  ],
+  "levels": [
+    {
+      "levelid": 1,
+      "levelfloor": 0,
+      "houseid": 1
+    },
+    {
+      "levelid": 2,
+      "levelfloor": 1,
+      "houseid": 1
+    }
+  ],
+  "doors": [
+    {
+      "doorid": 1,
+      "levelid": 1,
+      "position_x": 2
+    },
+    {
+      "doorid": 2,
+      "levelid": 2,
+      "position_x": 1
+    }
+  ],
+  "windows": [
+    {
+      "windowid": 1,
+      "levelid": 1,
+      "position_x": 1
+    },
+    {
+      "windowid": 2,
+      "levelid": 1,
+      "position_x": 3
+    },
+    {
+      "windowid": 3,
+      "levelid": 2,
+      "position_x": 2
+    }
+  ],
+  "blanks": [
+    {
+      "blankid": 1,
+      "levelid": 2,
+      "position_x": 3
+    }
+  ]
+}
