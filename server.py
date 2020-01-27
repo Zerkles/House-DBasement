@@ -1,5 +1,6 @@
 from sqlalchemy import *
-from flask import request, Flask
+from flask import request, Flask, send_file
+from generator.house_generator import json_to_list, create_image
 
 db_string = 'postgres://magda:gessler@localhost:5432/housedb'
 db_engine = create_engine(db_string)
@@ -46,10 +47,17 @@ def get(house_id):
     return result_json
 
 
+@app.route('/housedb/<house_id>/image', methods=['GET'])
+def get_img(house_id):
+    house_json = get(house_id)
+    img_url = house_json["houses"][0]["imageurl"]
+
+    return send_file(img_url, mimetype='image/png')
+
+
 @app.route('/housedb', methods=['POST'])
 def post():
     data_json = request.get_json(True)
-
     levels_map = dict()
 
     db_engine.execute(
@@ -80,12 +88,23 @@ def post():
         else:
             raise Exception
 
-    return get(db_engine.execute("SELECT MAX(HouseID) FROM Houses").fetchone()[0])
+    latest_added_houseid = db_engine.execute("SELECT MAX(HouseID) FROM Houses").fetchone()[0]
+
+    # generowanie obrazka
+    img_tuple = json_to_list(data_json)
+    image_path = create_image(img_tuple[0], img_tuple[1], img_tuple[2], latest_added_houseid)
+    ###
+    house_json = get(latest_added_houseid)
+    house_json["houses"][0]["imageurl"] = image_path
+    put(house_json)
+
+    return house_json
 
 
 @app.route('/housedb', methods=['PUT'])
-def put():
-    data_json = request.get_json(True)
+def put(data_json=None):
+    if data_json == None:
+        data_json = request.get_json(True)
 
     for table_name in data_json.keys():
         for obj in data_json[table_name]:
@@ -98,12 +117,11 @@ def put():
             sets = ""
             for k in keys:
                 if type(obj[k]) == str:
-                    sets += (k + " = '" + obj[k] + "', ")
+                    sets += (k + " = '" + obj[k] + "',")
                 else:
                     sets += (k + ' = ' + str(obj[k]) + ',')
 
             db_engine.execute(f"UPDATE {table_name} SET {sets[:-1]} WHERE {nameid}={obj[nameid]}")
-
 
     return get(data_json['houses'][0]['houseid'])
 

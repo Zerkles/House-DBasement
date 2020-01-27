@@ -50,7 +50,12 @@ def create_image(house_model: List[List[chr]] = None, chimneys: int = 0, roof: b
         draw.line(((0, height-(len(house_model)*40)), (int(width/2), 0)))
         draw.line(((int(width/2), 0), (width, height-(len(house_model)*40))))
 
-    img.save('obraz' + str(house_id) + '.png')
+    filename = 'obraz' + str(house_id) + '.png'
+    img.save(filename)
+
+    img_generated = Image.open(filename)
+
+    return img_generated.filename
 
 
 def json_to_list(json_) -> (List[List[chr]], int, bool):
