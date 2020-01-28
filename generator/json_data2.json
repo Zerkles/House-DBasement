@@ -1,0 +1,41 @@
+{
+    "house": {
+        "levelscount": 3,
+        "width": 2,
+        "imageurl": "asdsa",
+        "chimneyscount": 0,
+        "roof": true
+    },
+    "content": [
+        {
+            "type": "blank",
+            "pos_X": 0,
+            "pos_Y": 0
+        },
+        {
+            "type": "door",
+            "pos_X": 1,
+            "pos_Y": 0
+        },
+        {
+            "type": "window",
+            "pos_X": 0,
+            "pos_Y": 1
+        },
+        {
+            "type": "window",
+            "pos_X": 1,
+            "pos_Y": 1
+        },
+        {
+            "type": "blank",
+            "pos_X": 0,
+            "pos_Y": 2
+        },
+        {
+            "type": "blank",
+            "pos_X": 1,
+            "pos_Y": 2
+        }
+    ]
+}
