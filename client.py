@@ -10,7 +10,7 @@ def save_data(filename, data):
     with open(filename, 'w') as file_data:
         json.dump(data, file_data, indent=4)
 
-my_house = 'r0/bd/ww/bb'  # house example
+my_house = 'r1/bdb/wwb/bbb/bbb/wwb'  # house example
 
 def create_house(house:str):
     data = dict()
@@ -48,8 +48,16 @@ def create_house(house:str):
     data = {"house": houses, "content": content}
     print(data)
     save_data("json_data.json", data)
-    #r = requests.post("http://192.168.1.73:5000/housedb", data=json.dumps(data))
+    r = requests.post("http://127.0.0.1:5000/housedb", data=json.dumps(data))
 
+print('format:')
+print('r0/dw/bb/ww')
+print('house with roof, without chimney and three floors')
+print('r -> there is roof')
+print('_ -> no roof')
+print('d -> numebr of chimneys 0/1/2')
+print('floors separeted by /')
 
+my_house = input()
 
 create_house(my_house)

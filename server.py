@@ -50,7 +50,7 @@ def get(house_id):
 @app.route('/housedb/<house_id>/image', methods=['GET'])
 def get_img(house_id):
     house_json = get(house_id)
-    img_url = house_json["houses"][0]["imageurl"]
+    img_url = 'obraz' + str(house_id) + '.png'
 
     return send_file(img_url, mimetype='image/png')
 

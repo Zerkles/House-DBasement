@@ -1,6 +1,7 @@
 create table HOUSES(
 HouseID serial,
 LevelsCount int,
+HousesCount int,
 ImageURL VARCHAR(128)
 );
   
@@ -33,21 +34,15 @@ LevelID int,
 Position_x int
 );
 
-CREATE PROCEDURE count_windows(int)
-LANGUAGE plpgsql
-AS $$
+
+CREATE FUNCTION count_houses() RETURNS TRIGGER AS $$
 BEGIN
-    PERFORM COUNT(Windows.WindowID)
-    FROM Windows, Levels, Houses
-    WHERE Windows.LevelID = Levels.LevelID
-    AND Levels.HouseID = Houses.HouseID
-    AND Houses.HouseID = $1;
-    COMMIT;
+    
+    UPDATE HOUSES SET HousesCount = ((SELECT COUNT(*) FROM HOUSES) - 1) WHERE 1=1;
+
+    Return NULL;
 END;
-$$;
+$$ LANGUAGE 'plpgsql' ;
 
-CALL count_windows(2);
-
---CREATE TRIGGER counter AFTER INSERT
---ON Windows
---CALL count_windows(HouseID);
+CREATE TRIGGER counter AFTER INSERT ON HOUSES
+    EXECUTE PROCEDURE count_houses();
